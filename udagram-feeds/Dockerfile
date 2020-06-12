@@ -8,14 +8,20 @@ WORKDIR /usr/src/app
 # package.json and package-lock.json
 COPY package*.json ./
 
+RUN apt update && apt-get install -y p7zip \
+    p7zip-full \
+    zip
+
 # Install dependencies in Docker
 RUN npm install
 
 # Copy app from local environment into the Docker image
 COPY . .
 
+RUN npm run build
+
 # Set the API’s port number
 EXPOSE 8080
 
 # Define Docker’s behavior when the image is run
-CMD ["node", "server.js"]
+CMD ["node", "www/server.js"]
